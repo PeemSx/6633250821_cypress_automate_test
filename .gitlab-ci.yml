@@ -1,28 +1,26 @@
-stages: [test]
+stages:
+  - test
 
+## Cache npm modules & Cypress binary
 cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths:
     - node_modules/
     - .npm/
 
-cypress_e2e:
+test:
   stage: test
-  image: cypress/included:13.13.3
-  variables:
-    ELECTRON_DISABLE_GPU: "true"
-    QT_X11_NO_MITSHM: "1"
+  image: cypress/browsers:node-22.11.0-chrome-130.0.6723.69-1-ff-132.0-edge-130.0.2849.56-1
   script:
-    # install dependencies if package.json exists
+    # install dependencies
     - npm ci
-    # run only the EX04 test and record to Dashboard
+
+    # run only EX04-pom.cy.js and record to Dashboard
     - npx cypress run \
         --spec "cypress/e2e/EX04-pom.cy.js" \
         --record \
-        --key "$CYPRESS_RECORD_KEY" \
-        --browser chrome \
-        --group "GitLab CI" \
-        --ci-build-id "$CI_PIPELINE_ID"
+        --key "$CYPRESS_RECORD_KEY"
+
   artifacts:
     when: always
     paths:
