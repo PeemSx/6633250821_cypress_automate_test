@@ -17,7 +17,6 @@ test:
 
     # run only EX04-pom.cy.js and record to Dashboard
     - npx cypress run \
-        --config-file cypress.config.js \
         --spec "cypress/e2e/EX04-pom.cy.js" \
         --record \
         --key "$CYPRESS_RECORD_KEY"
