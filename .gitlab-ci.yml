@@ -1,0 +1,31 @@
+stages: [test]
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - node_modules/
+    - .npm/
+
+cypress_e2e:
+  stage: test
+  image: cypress/included:13.13.3
+  variables:
+    ELECTRON_DISABLE_GPU: "true"
+    QT_X11_NO_MITSHM: "1"
+  script:
+    # install dependencies if package.json exists
+    - npm ci
+    # run only the EX04 test and record to Dashboard
+    - npx cypress run \
+        --spec "cypress/e2e/EX04-pom.cy.js" \
+        --record \
+        --key "$CYPRESS_RECORD_KEY" \
+        --browser chrome \
+        --group "GitLab CI" \
+        --ci-build-id "$CI_PIPELINE_ID"
+  artifacts:
+    when: always
+    paths:
+      - cypress/videos/**/*.mp4
+      - cypress/screenshots/**/*.png
+    expire_in: 1 day
