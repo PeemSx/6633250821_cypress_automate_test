@@ -1,7 +1,6 @@
 stages:
   - test
 
-## Cache npm modules & Cypress binary
 cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths:
@@ -12,10 +11,7 @@ test:
   stage: test
   image: cypress/browsers:node-22.11.0-chrome-130.0.6723.69-1-ff-132.0-edge-130.0.2849.56-1
   script:
-    # install dependencies
     - npm ci
-
-    # run only EX04-pom.cy.js and record to Dashboard
     - npx cypress run \
         --spec "cypress/e2e/EX04-pom.cy.js" \
         --record \
