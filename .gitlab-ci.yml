@@ -13,14 +13,20 @@ cypress_e2e:
     ELECTRON_DISABLE_GPU: "true"
     QT_X11_NO_MITSHM: "1"
   script:
-    # install dependencies if package.json exists
     - npm ci
-    # run only the EX04 test and record to Dashboard
+    # ---- diagnostics (1 time) ----
+    - echo "Sanity env check (filtered):" && env | grep -E '^CYPRESS_|^CONFIG=' || true
+    # ---- prevent collision ----
+    - unset CONFIG || true
+    - unset CYPRESS_CONFIG || true
+    # ---- verify & run ----
+    - npx cypress verify
     - npx cypress run \
+        --config-file cypress.config.js \
         --spec "cypress/e2e/EX04-pom.cy.js" \
         --record \
         --key "$CYPRESS_RECORD_KEY" \
-        --browser chrome \
+        --browser electron \
         --group "GitLab CI" \
         --ci-build-id "$CI_PIPELINE_ID"
   artifacts:
