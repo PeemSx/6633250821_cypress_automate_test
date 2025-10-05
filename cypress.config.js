@@ -1,9 +1,10 @@
-const { defineConfig } = require("cypress");
+const { defineConfig } = require('cypress')
 
 module.exports = defineConfig({
   e2e: {
-    setupNodeEvents(on, config) {
-      // implement node event listeners here
-    },
+    baseUrl: 'http://zero.webappsecurity.com',
+    specPattern: 'cypress/e2e/**/*.cy.js',
+    video: true,
   },
-});
+  projectId: 'acx4qj',
+})
